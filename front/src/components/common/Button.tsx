@@ -1,26 +1,39 @@
-import {FC, ButtonHTMLAttributes} from "react";
+import { ButtonHTMLAttributes, AnchorHTMLAttributes, ElementType, forwardRef } from "react";
+import {LinkProps } from "react-router-dom";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary";
+type ButtonVariant = "primary" | "secondary";
+
+interface BaseButtonProps {
+  variant?: ButtonVariant;
+  as?: ElementType;
+  className?: string;
 }
 
-function Button({ 
-    children, 
-    variant = "primary", 
-    className = "", 
-    ...props }: ButtonProps) {
+type ButtonProps = BaseButtonProps &
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, "as" | "className">;
 
-        const baseStyle = "px-4 py-2 rounded transition-colors";
-        const variants = {
-            primary: "",
-            secondary: ""
-        };
+type AnchorButtonProps = BaseButtonProps &
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "as" | "className">;
 
-        return (
-            <button
-            {...props}
-            className={`${baseStyle} ${variants[variant]} ${className}`}>{children}</button>
-        );
-};
+type RouterLinkButtonProps = BaseButtonProps & Omit<LinkProps, "as" | "className">;
+
+type PolymorphicButtonProps = ButtonProps | AnchorButtonProps | RouterLinkButtonProps;
+
+const Button = forwardRef<HTMLElement, PolymorphicButtonProps>(function Button(
+  { as: Component = "button", children, variant = "primary", className = "", ...props },
+  ref
+) {
+  const baseStyle = "px-4 py-2 rounded transition-colors";
+  const variants = {
+    primary: "bg-blue-500 hover:bg-blue-600 text-white",
+    secondary: "bg-gray-200 hover:bg-gray-300 text-black",
+  };
+
+  return (
+    <Component ref={ref} className={`${baseStyle} ${variants[variant]} ${className}`} {...props}>
+      {children}
+    </Component>
+  );
+});
 
 export default Button;
