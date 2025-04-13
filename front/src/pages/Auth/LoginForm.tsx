@@ -1,9 +1,15 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { loginSchema } from "../../utils/validationSchemas";
+import { LoginFormData, loginSchema } from "../../utils/validationSchemas";
 import Button from "../../components/common/Button";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { loginUser } from "../../store/slices/authSlices/loginSlice"
 
 const LoginForm = () => {
-  const handleSubmit = (value: any) => {};
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useAppSelector((state) => state.login);
+  const handleSubmit = (value: LoginFormData) => {
+    dispatch(loginUser(value))
+  };
 
   return (
     <Formik
@@ -23,9 +29,11 @@ const LoginForm = () => {
             <Field name="password" type="password" className="" placeholder="******" />
             <ErrorMessage name="password" component="div" className="" />
           </div>
+          
+          {error && <div>{typeof error === "string" ? error : error.message}</div>}
 
-          <Button type="submit" className="" disabled={isSubmitting}>
-            {isSubmitting ? "Entering ..." : "Login"}
+          <Button type="submit" className="" disabled={isLoading}>
+            {isLoading ? "Entering ..." : "Login"}
           </Button>
         </Form>
       )}

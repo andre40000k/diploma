@@ -22,3 +22,6 @@ export const registerSchema = yup.object({
     .oneOf([yup.ref("password")], "Passwords do not compare")
     .required("Confirm password"),
 });
+
+export type LoginFormData = yup.InferType<typeof loginSchema>;
+export type RegisterFormData = yup.InferType<typeof registerSchema>;
