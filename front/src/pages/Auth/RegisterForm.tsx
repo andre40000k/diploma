@@ -1,9 +1,15 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { registerSchema } from "../../utils/validationSchemas";
+import { RegisterFormData, registerSchema } from "../../utils/validationSchemas";
 import Button from "../../components/common/Button";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { registerUser } from "../../store/slices/authSlices/registerSlice";
 
 const RegisterForm = () => {
-  const handleSubmit = (value: any) => {};
+  const dispatch = useAppDispatch();
+  const { isLoading, error } = useAppSelector((state) => state.regist);
+  const handleSubmit = (value: RegisterFormData) => {
+    dispatch(registerUser(value));
+  };
 
   return (
     <Formik
@@ -15,8 +21,8 @@ const RegisterForm = () => {
         <Form>
           <div>
             <label className="">Name</label>
-            <Field name="username" type="text" className="" placeholder="Andrii" />
-            <ErrorMessage name="username" component="div" className="" />
+            <Field name="name" type="text" className="" placeholder="Andrii" />
+            <ErrorMessage name="name" component="div" className="" />
           </div>
           <div>
             <label className="">Email</label>
@@ -29,8 +35,10 @@ const RegisterForm = () => {
             <ErrorMessage name="password" component="div" className="" />
           </div>
 
-          <Button type="submit" className="" disabled={isSubmitting}>
-            {isSubmitting ? "Registering ..." : "Sing up"}
+          {error && <div>{typeof error === "string" ? error : error.message}</div>}
+
+          <Button type="submit" className="" disabled={isLoading}>
+            {isLoading ? "Registering ..." : "Sing up"}
           </Button>
         </Form>
       )}
