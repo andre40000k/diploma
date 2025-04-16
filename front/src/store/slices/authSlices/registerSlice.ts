@@ -5,10 +5,10 @@ import { initialState } from "./initialState";
 import { User } from "../../../types/entities/UserInterface";
 
 export const registerUser = createAsyncThunk<User, RegisterFormData, {rejectValue: { message: string } | string}>(
-    'auth/registration',
+    'auth/register',
     async (data: RegisterFormData, {rejectWithValue }) => {
         try{
-            const response = await $api.post('auth/registration', data);
+            const response = await $api.post("auth/register", data);
             localStorage.setItem('token', response.data.token);
             return response.data.user;
         }

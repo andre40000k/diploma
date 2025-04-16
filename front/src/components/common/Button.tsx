@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes, AnchorHTMLAttributes, ElementType, forwardRef } from "react";
-import {LinkProps } from "react-router-dom";
+import { Link, LinkProps } from "react-router-dom";
 
 type ButtonVariant = "primary" | "secondary";
 
@@ -7,6 +7,7 @@ interface BaseButtonProps {
   variant?: ButtonVariant;
   as?: ElementType;
   className?: string;
+  to?: string;
 }
 
 type ButtonProps = BaseButtonProps &
@@ -15,7 +16,7 @@ type ButtonProps = BaseButtonProps &
 type AnchorButtonProps = BaseButtonProps &
   Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "as" | "className">;
 
-type RouterLinkButtonProps = BaseButtonProps & Omit<LinkProps, "as" | "className">;
+type RouterLinkButtonProps = BaseButtonProps & Omit<LinkProps, "as" | "className" | "variant">;
 
 type PolymorphicButtonProps = ButtonProps | AnchorButtonProps | RouterLinkButtonProps;
 
@@ -30,7 +31,12 @@ const Button = forwardRef<HTMLElement, PolymorphicButtonProps>(function Button(
   };
 
   return (
-    <Component ref={ref} className={`${baseStyle} ${variants[variant]} ${className}`} {...props}>
+    <Component
+      ref={ref}
+      className={`${baseStyle} ${variants[variant]} ${className}`}
+      to={(props as RouterLinkButtonProps).to}
+      {...props}
+    >
       {children}
     </Component>
   );

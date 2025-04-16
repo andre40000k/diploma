@@ -1,34 +1,27 @@
-import { useState } from "react"
-import { Link, useLocation } from "react-router";
+import { Link, useLocation } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 
 const Auth = () => {
-    const location = useLocation();
-    const [isLogin, setIsLogin] = useState(location.pathname.includes('login'));
-    return(
-        <div>
-            <h1>
-                {isLogin ? 'Login' : 'Sing up'}
-            </h1>
+  const location = useLocation();
+  const isLogin = location.pathname.includes("login");
 
-            {isLogin ? <LoginForm/> : <RegisterForm/>}
+  return (
+    <div>
+      <h1>
+        {isLogin ? "Login" : "Sign up"}
+      </h1>
 
-            <div>
-                <span>
-                    {isLogin? 'Do not you have an account?' : 'Do you hav an account?'}
-                </span>
-                <Link
-                to={isLogin ? '/auth/register' : '/auth/login'}
-                className=""
-                onClick={() => setIsLogin(!isLogin)}
-                >
-                    {isLogin ? 'Sing up' : 'Login'}
+      {isLogin ? <LoginForm /> : <RegisterForm />}
 
-                </Link>
-            </div>
-        </div>
-    );
-}
+      <div>
+        <span>{isLogin ? "Don't have an account?" : "Already have an account?"}</span>
+        <Link to={isLogin ? "/auth/register" : "/auth/login"} className="">
+          {isLogin ? "Sign up" : "Login"}
+        </Link>
+      </div>
+    </div>
+  );
+};
 
 export default Auth;

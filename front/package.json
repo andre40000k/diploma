@@ -17,6 +17,8 @@
     "axios": "^1.8.4",
     "formik": "^2.4.6",
     "husky": "^9.1.7",
+    "jsonwebtoken": "^9.0.2",
+    "passport-jwt": "^4.0.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",

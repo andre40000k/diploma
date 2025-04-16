@@ -9,6 +9,7 @@ export const loginUser = createAsyncThunk<User, LoginFormData, { rejectValue: { 
   async (credentials: LoginFormData, { rejectWithValue }) => {
     try {
       const response = await $api.post("auth/login", credentials);
+      console.log(response);
       localStorage.setItem("token", response.data.token);
       return response.data.user;
     } catch (err: any) {
